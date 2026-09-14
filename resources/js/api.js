@@ -8,7 +8,12 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('kartabl_token');
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+        // Authorization استاندارد؛ X-Auth-Token پشتیبان هاست‌های اشتراکی است که
+        // هدر Authorization را به PHP نمی‌رسانند (Apache/FastCGI).
+        config.headers.Authorization = `Bearer ${token}`;
+        config.headers['X-Auth-Token'] = token;
+    }
     return config;
 });
 
